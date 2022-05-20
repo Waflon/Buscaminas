@@ -1,13 +1,14 @@
 class Cuadro{
-    constructor(posX, posY,  columna = 1, fila = 1, valor = 0){
+    constructor(posX, posY, fila = 1, columna = 1, vecinos = []){
         this.x = posX;
         this.y = posY;
-        this.valor = valor;
+        this.valor = 0;
         this.fila = fila ;
         this.columna = columna;
         this.bomba = false;
         this.clickeado = false;
         this.color = 100;
+        this.vecinos = vecinos;
     }
 
     dibujar(){

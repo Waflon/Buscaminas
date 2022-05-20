@@ -1,4 +1,109 @@
 //Funciones recopiladas en un archivo para facilidad de lectura
+function generarBombas() {
+    let c = 0;
+
+    while (c < 20) {
+        let i = Math.floor(Math.random() * n * m);
+        if (!ArregloCuadros[i].bomba) {
+            ArregloCuadros[i].bomba = true;
+            c++;
+        }
+    }
+}
+
+function asignarVecinos(fila, columna) {
+    let listaVecinos = [];
+
+    //Vecinos de los Bordes
+    if (fila == 0) {  // PRIMERA FILA
+
+        if (columna == 0) {  //ESQUNA SUPERIOR IZQUIERDA
+            listaVecinos.push(1);
+            listaVecinos.push((columna + 1) * n);
+            listaVecinos.push((columna + 1) * n + 1);
+            return listaVecinos;
+        }
+
+        else if (columna == m - 1) {  //ESQUNA SUPERIOR DERECHA
+            listaVecinos.push(n - 2);
+            listaVecinos.push(2 * n - 2);
+            listaVecinos.push(2 * n - 1);
+            return listaVecinos;
+        }
+
+        else if (columna > 0 && columna < m - 1) {  //BORDE SUPERIOR
+            listaVecinos.push(columna - 1);
+            listaVecinos.push(columna + 1);
+            listaVecinos.push(columna + n - 1);
+            listaVecinos.push(columna + n);
+            listaVecinos.push(columna + n + 1);
+            return listaVecinos;
+        }
+
+    } else if (fila == n - 1) { //ULTIMA FILA
+
+        if (columna == 0) {
+            listaVecinos.push((n - 2) * m);
+            listaVecinos.push((n - 2) * m + 1);
+            listaVecinos.push((n - 1) * m + 1);
+            return listaVecinos;
+        } 
+
+        else if (columna == m - 1) {  //ESQUINA INFERIOR DERECHA
+            listaVecinos.push((n - 1) * m - 2);
+            listaVecinos.push((n - 1) * m - 1);
+            listaVecinos.push(n * m - 2);
+            
+            return listaVecinos;
+        }
+
+        else if (columna > 0 && columna < m - 1) {  //BORDE INFERIOR
+            let indice = fila * m + columna;
+            listaVecinos.push(indice - m - 1);
+            listaVecinos.push(indice - m);
+            listaVecinos.push(indice - m + 1);
+            listaVecinos.push(indice - 1);
+            listaVecinos.push(indice + 1);
+            return listaVecinos;
+        }
+
+    } else if (fila > 0 && fila < n - 1) {  //EN MEDIO
+        if (columna == 0) {  //BORDE IZQUIERDO
+
+            let indice = fila * m;
+            listaVecinos.push(indice - m);
+            listaVecinos.push(indice - m + 1);
+            listaVecinos.push(indice + 1);
+            listaVecinos.push(indice + m);
+            listaVecinos.push(indice + m + 1);
+            return listaVecinos;
+        } else if (columna == m - 1) {  //BORDE DERECHO
+
+            let indice = fila * m + columna;
+            listaVecinos.push(indice - m - 1);
+            listaVecinos.push(indice - m);
+            listaVecinos.push(indice - 1);
+            listaVecinos.push(indice + m - 1);
+            listaVecinos.push(indice + m);
+            
+            return listaVecinos;
+        }
+        else if (fila > 0 && fila < n - 1) {  //TODO LO INTERIOR
+
+            let indice = columna + fila * m;
+            listaVecinos.push(indice - m - 1);
+            listaVecinos.push(indice - m);
+            listaVecinos.push(indice - m + 1);
+            listaVecinos.push(indice - 1);
+            listaVecinos.push(indice + 1);
+            listaVecinos.push(indice + m - 1);
+            listaVecinos.push(indice + m);
+            listaVecinos.push(indice + m + 1);
+            return listaVecinos;
+        }
+    }
+    return [];
+}
 
 function hoover(cuadro) {
     if (cuadro.x < mouseX && cuadro.y < mouseY && mouseX < cuadro.x + w && mouseY < cuadro.y + h) {
@@ -7,270 +112,12 @@ function hoover(cuadro) {
     return false;
 }
 
-function verificarEsquinas(cuadro) {
-    if (cuadro.fila == 0) {
-
-        if (cuadro.columna == 0) { 
-            //ESQUNA SUPERIOR IZQUIERDA
-            print("Esquina Superior Izquierda");
-            if (ArregloCuadros[1].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[n].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[n + 1].bomba) {
-                cuadro.valor += 1;
-            }
-        }
-        else if (cuadro.columna == m - 1) { 
-            //ESQUNA INFERIOR IZQUIERDA
-            print("Esquina Inferior Izquierda");
-            let indice = (cuadro.fila + 1 * (n)) * cuadro.columna + 1;
-            print(indice);
-            print(indice-5);
-            print(indice +n -2);
-            if (ArregloCuadros[indice].bomba) {
-                print("derecha");
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[indice - n].bomba) {
-                print("superior derecho");
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[indice - n-1].bomba) {
-                print("superior");
-                cuadro.valor += 1;
-            }
-        }
-
-    } else if (cuadro.fila == n - 1) {
-        //ESQUNA SUPERIOR DERECHA
-        if (cuadro.columna == 0) { 
-            print("Esquina Superior Derecha");
-            if (ArregloCuadros[n - 2].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[n * 2 - 1].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[n * 2 - 2].bomba) {
-                cuadro.valor += 1;
-            }
-        }
-        //ESQUNA Inferior DERECHA
-        else if (cuadro.columna == m - 1) { 
-            print("Esquina Inferior Derecha");
-            let indice = (cuadro.fila * n + cuadro.columna);
-            if (ArregloCuadros[indice - 1].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[indice - n].bomba) {
-                cuadro.valor += 1;
-            }
-            if (ArregloCuadros[indice - n - 1].bomba) {
-                cuadro.valor += 1;
-            }
-        }
-    }
-}
-
-function verificarBordesSup(cuadro) {  //Revisado
-    //BORDE Superior PARA CUALQUIER MATRIZ MxN  (5 cuadros colindantes para los bordes siempre)
-    if (cuadro.fila == 0) {
-        //cuadro de la derecha
-        if (ArregloCuadros[cuadro.columna + 1].bomba) {
-            print("derecha")
+function asignarValor(cuadro){
+    print(cuadro.vecinos);
+    for (let i of cuadro.vecinos){
+        if(ArregloCuadros[i].bomba){
             cuadro.valor += 1;
         }
-        //cuadro de la Izquierda
-        if (ArregloCuadros[cuadro.columna - 1].bomba) {
-            print("izquierda")
-            cuadro.valor += 1;
-        }
-        //cuadro de abajo
-        if (ArregloCuadros[cuadro.columna + n].bomba) {
-            print("abajo")
-            cuadro.valor += 1;
-        }
-        //cuadro de abajo Izquierdo
-        if (ArregloCuadros[cuadro.columna + n - 1].bomba) {
-            print("abajo Izquierdo")
-            cuadro.valor += 1;
-        }
-        //cuadro de abajo Derecho
-        if (ArregloCuadros[cuadro.columna + n + 1].bomba) {
-            print("abajo derecho")
-            cuadro.valor += 1;
-        }                  
-    }
-}
-
-function verificarBordesInf(cuadro) {  // Revisado
-    print(cuadro);
-    //BORDE DERECHO PARA CUALQUIER MATRIZ MxN  (5 cuadros colindantes para los bordes siempre)
-    if (cuadro.fila == n - 1) {
-        
-        let indice = n * cuadro.fila + cuadro.columna;
-        print(indice)
-        // Derecha
-        if (ArregloCuadros[indice +1].bomba) {
-            print("Derecha");
-            cuadro.valor += 1;
-        }
-
-        // izquierda
-        if (ArregloCuadros[indice -1].bomba) {
-            print("izquierda");
-            cuadro.valor += 1;
-        }
-
-        //Arriba
-        if (ArregloCuadros[indice - n].bomba){
-            print("Arriba");
-            cuadro.valor +=1;
-        }
-
-        //Arriba Izquierda
-        if (ArregloCuadros[indice - n -1].bomba){
-            print("Arriba Izquierda");
-            cuadro.valor +=1;
-        }        
-        //Arriba Derecha
-        if (ArregloCuadros[indice - n +1].bomba){
-            print("Arriba Derecha");
-            cuadro.valor +=1;
-        }      
-    }
-}
-
-function verificarBordesIzq(cuadro) {  // Revisado
-    
-    if (cuadro.columna == 0) {
-        let indice = cuadro.fila * n;
-
-        //Abajo
-        if (ArregloCuadros[indice + n].bomba) {
-            print("Abajo");
-            cuadro.valor += 1;
-        }
-        //Abajo derecha
-        if (ArregloCuadros[indice + n + 1].bomba) {
-            print("Abajo derecha");
-            cuadro.valor += 1;
-        }        
-        //Derecha
-        if (ArregloCuadros[indice + 1].bomba) {
-            print("Derecha");
-            cuadro.valor += 1;
-        }       
-        //Arriba
-        if (ArregloCuadros[indice - n].bomba) {
-            print("Arriba");
-            cuadro.valor += 1;
-        }
-        //Arriba Derecha
-        if (ArregloCuadros[indice - n + 1].bomba) {
-            print("Arriba Derecha");
-            cuadro.valor += 1;
-        }        
-    }
-
-
-}
-
-function verificarBordesDer(cuadro) {  //Revisado?
-
-    let indice = cuadro.fila * n + cuadro.columna;
-    print(indice );
-    if (cuadro.columna == n - 1) {
-        if (ArregloCuadros[indice - 1].bomba) {
-            print("Izquierda");
-            cuadro.valor += 1;
-        }
-        if (ArregloCuadros[indice - n].bomba) {
-            print("Arriba");
-            cuadro.valor += 1;
-        }
-        if (ArregloCuadros[indice + n ].bomba) {
-            print("Abajo");
-            cuadro.valor += 1;
-        }
-        if (ArregloCuadros[indice + n -1].bomba) {
-            print("Abajo Izquierda");
-            cuadro.valor += 1;
-        }
-        if (ArregloCuadros[indice - n - 1].bomba) {
-            print("Arriba  Izquierda");
-            cuadro.valor += 1;
-        }
-    }
-
-}
-
-function verificarInternos(cuadro){
-    let indice = cuadro.columna+cuadro.fila*n;
-    // Derecha
-    if(ArregloCuadros[indice+1].bomba){
-        print("derecha");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice-1].bomba){
-        print("izquierda");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice-n].bomba){
-        print("arriba");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice-n+1].bomba){
-        print("arriba derecha");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice-n-1].bomba){
-        print("arriba izquierda");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice+n].bomba){
-        print("abajo");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice+n+1].bomba){
-        print("abajo derecha");
-        cuadro.valor += 1;
-    }
-
-    if(ArregloCuadros[indice+n-1].bomba){
-        print("abajo izquierda");
-        cuadro.valor += 1;
-    }
-}
-
-function calcularBombasVecinos(cuadro) {
-    if (cuadro.fila == 0 || cuadro.fila == n - 1) {
-        if (cuadro.columna == 0 || cuadro.columna == m - 1) {
-            verificarEsquinas(cuadro);
-        }
-        else {  
-            verificarBordesSup(cuadro);
-            verificarBordesInf(cuadro);
-        }
-    }
-    else if (cuadro.columna == 0 || cuadro.columna == m - 1) {
-        if (cuadro.fila !== 0 || cuadro.fila !== n - 1) {
-           
-            verificarBordesIzq(cuadro);
-            verificarBordesDer(cuadro);
-        }
-    }
-    else {
-        verificarInternos(cuadro);     
     }
 }
 
@@ -284,26 +131,25 @@ function dibujarLineas() {
     }
 }
 
-
 //funciones llamadas siempre por P5
 function mouseClicked() {
-    if (gameState=='play'){
+    if (gameState == 'play') {
         // RECORRE LOS CUADROS
         for (let cuadro of ArregloCuadros) {
             if (hoover(cuadro)) {
                 if (!cuadro.clickeado) {
                     cuadro.clickeado = true;
-                    if (!cuadro.bomba){
-                        calcularBombasVecinos(cuadro);
+                    if (!cuadro.bomba) {
+                        asignarValor(cuadro);
                     }
                     else if (cuadro.bomba) {
                         cuadro.color = [255, 0, 150];
                         cuadro.dibujar();
-                        gameState='gameOver';
+                        //gameState = 'gameOver';
                         return true;
-                        
+
                     }
-                      //Deja inutilizable el boton
+                    //Deja inutilizable el boton
                     cuadro.color = [0, 250, 150];
                     return true;
                 }
@@ -311,19 +157,19 @@ function mouseClicked() {
             }
         }
     }
-    else{
-        gameState='play';
+    else {
+        gameState = 'play';
     }
-    
+
 }
 
 function keyPressed() {
-    if (gameState=='menu'){
+    if (gameState == 'menu') {
         if (keyCode === ENTER) {
-            gameState = 'play';      
+            gameState = 'play';
         }
     }
     return false
-  }
+}
 
 
