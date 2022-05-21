@@ -19,20 +19,27 @@ function llenarListaCuadros(){
     return lista;
 }
 
+function reiniciarCuadros(){
+    ArregloCuadros = []
+    ArregloCuadros = llenarListaCuadros()  // retorna un arreglo con objetos Cuadro
+    dibujarLineas();  // GRID
+    for (let _ of ArregloCuadros){
+        _.asignarValor(ArregloCuadros);  // El valor se asigna después ya que necesitan estar todas las bombas creadas
+    }
+}
 
 function setup() {
     createCanvas(600, 600);
+    button = createButton("Reiniciar");
+    button.mousePressed(reiniciarCuadros);
     w = width / n; // ancho que tendrá cada cuadro
     h = height / m;  // altura de cada cuadro
-    ArregloCuadros = llenarListaCuadros()
-    dibujarLineas();
-    for (let _ of ArregloCuadros){
-        _.asignarValor(ArregloCuadros);
-    }
+    reiniciarCuadros()
 }
 
 
 function draw() {
+
     if (gameState == 'menu') {
         background(150);
         textSize(30);

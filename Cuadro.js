@@ -15,34 +15,6 @@ class Cuadro {
         this.generarBomba();
     }
 
-    generarBomba(){
-        let i = Math.floor(Math.random() * 100);
-        if (i<15){ // ASIGNAR BOMBAS CON UN 20 PORCIENTO DE PROBABILIDAD
-            this.bomba = true;
-        }
-    }
-
-
-    dibujar() {
-        fill(this.color);
-        strokeWeight(2)
-        rect(this.x, this.y, w, h);
-        textSize(40);
-        textAlign(CENTER);  // Centra texto
-        if (this.clickeado && this.valor > 0 && !this.bomba) {
-            fill(0);
-            text(this.valor, this.x + w / 2, this.y + height / 13);
-        }
-    }
-    
-    asignarValor(lista){
-        for (let vecino of this.vecinos){
-            if(lista[vecino].bomba){
-                this.valor += 1;
-            }
-        }
-    }
-
     asignarVecinos(){
         this.vecinos = [];  //limpia la lista de vecinos
         //Vecinos de los Bordes
@@ -121,6 +93,33 @@ class Cuadro {
                 this.vecinos.push(indice + m - 1);
                 this.vecinos.push(indice + m);
                 this.vecinos.push(indice + m + 1);
+            }
+        }
+    }
+
+    generarBomba(){
+        let i = Math.floor(Math.random() * 100);
+        if (i<10){ // ASIGNAR BOMBAS CON UN 20 PORCIENTO DE PROBABILIDAD
+            this.bomba = true;
+        }
+    }
+
+    dibujar() {
+        fill(this.color);
+        strokeWeight(2)
+        rect(this.x, this.y, w, h);
+        textSize(40);
+        textAlign(CENTER);  // Centra texto
+        if (this.clickeado && this.valor > 0 && !this.bomba) {
+            fill(0);
+            text(this.valor, this.x + w / 2, this.y + height / 13);
+        }
+    }
+    
+    asignarValor(lista){
+        for (let vecino of this.vecinos){
+            if(lista[vecino].bomba){  // verifica si uno de los cuadros vecinos tiene una bomba
+                this.valor += 1;
             }
         }
     }
