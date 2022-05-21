@@ -6,14 +6,17 @@ let m = 9;
 let gameState = 'menu'
 
 
-function llenarListaCuadros(ArregloCuadros){
+function llenarListaCuadros(){
+    let lista = []
     for (let fila = 0; fila < m; fila++) {
         for (let columna = 0; columna < n; columna++) {
-            let lista = asignarVecinos(fila, columna)
-            ArregloCuadros.push(new Cuadro(columna * w, fila * h, fila, columna, lista));
+            let posX = columna * w;
+            let posY = fila * h;
+            let cuadro = new Cuadro(posX, posY, fila, columna) 
+            lista.push(cuadro);
         }
     }
-    return ArregloCuadros
+    return lista;
 }
 
 
@@ -21,9 +24,11 @@ function setup() {
     createCanvas(600, 600);
     w = width / n; // ancho que tendrá cada cuadro
     h = height / m;  // altura de cada cuadro
-    llenarListaCuadros(ArregloCuadros)
+    ArregloCuadros = llenarListaCuadros()
     dibujarLineas();
-    generarBombas();
+    for (let _ of ArregloCuadros){
+        _.asignarValor(ArregloCuadros);
+    }
 }
 
 
